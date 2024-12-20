@@ -6,11 +6,20 @@
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   </head>
   <body>
+    <div class="header-nav">
+      <header>
+        <h1>{{ page.title }}</h1>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/projects/">Projects</a></li>
+        </ul>
+      </nav>
+    </div>
     <div id="container">
       <div class="inner">
-        <header>
-          <h1>{{ page.title }}</h1>
-        </header>
         <section id="main_content">
           {{ content }}
         </section>
