@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="tic.css">
+    <script src="tac.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div class="title">
+            <h1>NUCLEAR TIC TAC TOE</h1>
+            <br>
+        </div>
+        <p id="ins">
+              Game begins by clicking on a box.<br><br>First Player starts as
+            <b>Player X </b>And Second Player as 
+            <b>Player 0</b>
+        </p>
+        <br><br>
+        <div class="ui">
+            <div class="bomb-buttons">
+                <button id="bombX" onClick="useBomb('X')"><b>Player X Bomb</b> (Remaining: <span id="bombXCount">2</span>)</button>
+                <button id="bomb0" onClick="useBomb('0')"><b>Player 0 Bomb</b> (Remaining: <span id="bomb0Count">2</span>)</button>
+            </div>
+            <br><br>
+            <div class="row">
+                <div id="b1" class="cell normal" onclick="myfunc_3()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b2" class="cell normal" onclick="myfunc_4()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b3" class="cell normal" onclick="myfunc_5()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="b4" class="cell normal" onclick="myfunc_6()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b5" class="cell normal" onclick="myfunc_7()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b6" class="cell normal" onclick="myfunc_8()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="b7" class="cell normal" onclick="myfunc_9()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b8" class="cell normal" onclick="myfunc_10()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+                <div id="b9" class="cell normal" onclick="myfunc_11()">
+                    <div class="content">
+                        <input type="text" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+      
+        <button id="but" onclick="myfunc_2()">
+            RESET
+        </button>
+        <br><br>
+        <p id="print"></p>
+            <br><h3>Rules:</h3>
+            <div class = "rulesDiv">
+            <br><b>1.The game is played on a 3x3 grid</b><br>
+
+            <br><b>2. Two players take turns:</b>
+                    <br> Player X goes first (marked with 'X')
+                    <br> Player O goes second (marked with '0') <br>
+            <br><b>3. Standard Moves:</b>
+                    <br> Players click empty squares to place their mark (X or 0)
+                    <br> Once a square is marked, it cannot be changed <br>
+            <br><b>4. Nuclear Bomb Feature:</b>
+                    <br> Each player gets 2 "nuclear bombs" per game
+                    <br> Player X's remaining bombs are shown at the top with "Player X Bomb (Remaining: X)"
+                    <br> Player 0's remaining bombs are shown at the top with "Player 0 Bomb (Remaining: X)"
+                    <br> When using a bomb, players must:
+                    <br> Choose between clearing a row or column
+                    <br> Enter the row/column number (1, 2, or 3)
+                    <br> The chosen row/column becomes radioactive for 2 turns
+                    <br> Players cannot place marks in radioactive squares <br> 
+            <br><b>5. Radioactive Squares:</b>
+                    <br> Appear red instead of green
+                    <br> Cannot be played on while radioactive
+                    <br> Return to normal (green) after 2 turns<br> 
+            <br><b>6. Winning Conditions:</b>
+                    
+                    <br> Get three marks in a row (horizontal, vertical, or diagonal)
+                    <br> Winning squares are highlighted in red
+                    <br> Game ends when a player wins or it's a tie <br> 
+            <br><b>7. Additional Features:</b>
+                    <br> A "RESET" button to start a new game
+                    <br> Game status is shown below the grid
+                    <br> Radioactive squares decay after 2 turns and become playable again
+            </div>
+    </div>
+    <div class="sticker sticker-1">
+        <img src="images/radioactiveSymbol.png" alt="radioactive">
+    </div>
+    <div class="sticker sticker-2">
+        <img src="images/radioactiveSymbol.png" alt="radioactive">
+    </div>
+    <div class="sticker sticker-3">
+        <img src="images/radioactiveSymbol.png" alt="radioactive">
+    </div>
+    <div class="sticker sticker-4">
+        <img src="images/radioactiveSymbol.png" alt="radioactive">
+    </div>
+
+    <div class="modal" id="bombModal" style="display: none">
+        <div class="modal-content">
+            <h3>Use Nuclear Bomb</h3>
+            <select id="bombChoice">
+                <option value="">Select target...</option>
+                <option value="row">Row</option>
+                <option value="column">Column</option>
+            </select>
+            <select id="bombNumber">
+                <option value="">Select number...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <div class="modal-buttons">
+                <button onclick="confirmBomb()">Confirm</button>
+                <button onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

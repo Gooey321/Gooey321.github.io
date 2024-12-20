@@ -1,0 +1,328 @@
+/* General Styles */
+body {
+    background-color: rgb(148, 253, 164); /* Light green background */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: black;
+    margin-bottom: -5px;
+}
+
+.title {
+    background-color: #36e62d;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.rulesDiv {
+    text-align: left;
+    max-width: 550px;
+    margin: 0 auto;
+    padding: 0 20px;    
+}
+
+p {
+    margin-bottom: 20px;
+    color: #35963b; /* Medium green */
+}
+
+#ins {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: black;
+}
+
+/* UI Container */
+.ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Bomb Buttons */
+.bomb-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.bomb-buttons button {
+    box-sizing: border-box;
+    width: 150px;
+    height: 75px;
+    border: 1px solid #1fcc2a;
+    margin: 0 10px;
+    border-radius: 8px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #54f05e; /* Light green */
+    color: black;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.bomb-buttons button:hover {
+    background-color: #1fcc2a; /* Darker green on hover */
+    color: white;
+}
+
+.bomb-buttons button:disabled {
+    background-color: #cccccc;
+    border-color: #999999;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Reset Button */
+#but {
+    box-sizing: border-box;
+    width: 95px;
+    height: 40px;
+    border: 1px solid black;
+    margin: 20px auto;
+    border-radius: 8px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: whitesmoke;
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#but:hover {
+    background-color: #1fcc2a; /* Darker green on hover */
+    color: white;
+    transform: scale(1.01)
+}
+
+/* Game Grid */
+.row {
+    display: flex;
+}
+
+.cell {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    font-size: 34px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #54f05e; /* Light green */
+    overflow: hidden;
+    border: 1px solid black;
+    box-sizing: border-box;
+    transition: transform 0.1s ease;
+}
+
+.cell .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
+    transform-origin: center;
+}
+
+.cell input {
+    border: none;
+    background: transparent;
+    font-size: 34px;
+    color: currentColor;
+    pointer-events: none; /* Prevent input focus */
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+/* Hover and Active States */
+.cell:hover .content {
+    transform: scale(1.05);
+}
+
+.cell:active .content {
+    transform: scale(0.95);
+}
+
+/* Normal State */
+.cell.normal .content {
+    background-color: #54f05e; /* Light green */
+    color: #000000; /* Black text */
+}
+
+.cell.radioactive .content {
+    background-color: #ff0000;
+    cursor: not-allowed;
+}
+
+/* Ensuring Consistent Styling */
+.normal {
+    background-color: #54f05e; /* Light green */
+    color: #000000; /* Black text */
+}
+
+/* Print Area */
+#print {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #35963b;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+/* Specific Cell Borders and Corner Radii for 3x3 Grid */
+#b1 {
+    border-top-left-radius: 10px;
+}
+
+#b3 {
+    border-top-right-radius: 10px;
+}
+
+#b7 {
+    border-bottom-left-radius: 10px;
+}
+
+#b9 {
+    border-bottom-right-radius: 10px;
+}
+
+#b1:hover, #b2:hover, #b3:hover, #b4:hover, #b5:hover, #b6:hover, #b7:hover, #b8:hover, #b9:hover {
+    transform: scale(1.05);
+}
+
+#b1:active, #b2:active, #b3:active, #b4:active, #b5:active, #b6:active, #b7:active, #b8:active, #b9:active {
+    transform: scale(0.95);
+}
+/* Responsive Design (Optional) */
+@media (max-width: 600px) {
+    .cell {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    
+    .bomb-buttons button {
+        width: 120px;
+        height: 60px;
+        font-size: 12px;
+    }
+    
+    #but {
+        width: 80px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    #print {
+        font-size: 16px;
+    }
+}
+
+/* Sticker Container */
+/* tic.css */
+/* Sticker Container */
+.sticker {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    z-index: -1;
+    filter: invert(75%) sepia(50%) saturate(400%) hue-rotate(75deg) brightness(95%);
+}
+
+.sticker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.7;
+}
+
+/* Individual Sticker Positions */
+.sticker-1, .sticker-2, .sticker-3, .sticker-4 {
+    transition: transform 0.3s ease;
+}
+
+.sticker:hover {
+    transform: scale(1.2);
+}
+
+.sticker-1 {
+    top: 20px;
+    left: 20px;
+    transform: rotate(-15deg);
+}
+
+.sticker-2 {
+    top: 20px;
+    right: 20px;
+    transform: rotate(15deg);
+}
+
+.sticker-3 {
+    bottom: 20px;
+    left: 20px;
+    transform: rotate(15deg);
+}
+
+.sticker-4 {
+    bottom: 20px;
+    right: 20px;
+    transform: rotate(-15deg);
+}
+
+.sticker-1, .sticker-2, .sticker-3, .sticker-4 {
+    transform: scale(1.5);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: #54f05e;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.modal select {
+    width: 200px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.modal-buttons button {
+    margin: 0 10px;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #1fcc2a;
+    color: white;
+    border: none;
+}
