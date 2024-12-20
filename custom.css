@@ -1,0 +1,35 @@
+/* Navigation container */
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  /* Navigation list */
+  .header-nav nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+  }
+  
+  /* Navigation items */
+  .header-nav nav ul li {
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Navigation links */
+  .header-nav nav ul li a {
+    font-size: 18px;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  /* Hover effect */
+  .header-nav nav ul li a:hover {
+    color: #d5000d;
+  }
