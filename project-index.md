@@ -7,6 +7,13 @@ permalink: /projects/
 <br>
 <div class="project-grid">
   <div class="project-card">
+    <a href="/assets/Wordle-Solver/index.html">
+      <img src="/assets/images/Wordle-Solver-THUMB.png" alt="Wordle Solver Preview">
+      <h3>Wordle Solver</h3>
+    </a>
+  </div>
+
+  <div class="project-card">
     <a href="/assets/Physics-Engine/index.html">
       <img src="/assets/images/physics-engine-thumb.png" alt="Physics Engine Preview">
       <h3>Physics Engine</h3>
