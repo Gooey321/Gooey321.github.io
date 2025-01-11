@@ -1,3 +1,12 @@
+---
+layout: post
+title: "Wordle Solver"
+description: "A wordle solver built to assist in wordle solving"
+github: "https://github.com/Gooey321/Wordle-Solver"
+author: Sam
+date: 2025-1-11 14:18:35 +1100
+---
+
 # Wordle Solver
 
 ## Overview
