@@ -2,6 +2,7 @@
 layout: default
 title: Home
 ---
+
 <h1>Latest Posts</h1>
 
 <ul>

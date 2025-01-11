@@ -5,6 +5,7 @@ date: 2024-12-19 17:55:23 +1100
 categories: jekyll tutorial
 author: Sam
 ---
+
 I'll probably be using this site to put projects and other stuff on to showcase. Just a place to mess around on.
 
 In this post i'll be exploring some of jekyll's features!
@@ -29,9 +30,11 @@ console.log("Hello, World!")
 {% endhighlight %}
 
 ## Links
+
 Check out my Github: [Gooey321]
 
 ## Including Variables
+
 The title for this post is: **{{ site.title }}**
 
-[Gooey321]:   https://github.com/Gooey321
+[Gooey321]: https://github.com/Gooey321

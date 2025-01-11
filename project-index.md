@@ -3,6 +3,7 @@ layout: default
 title: Projects
 permalink: /projects/
 ---
+
 <br>
 <div class="project-grid">
   <div class="project-card">
@@ -19,4 +20,3 @@ permalink: /projects/
     </a>
   </div>
 </div>
-
