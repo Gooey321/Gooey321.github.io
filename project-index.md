@@ -7,7 +7,7 @@ permalink: /projects/
 <br>
 <div class="project-grid">
   <div class="project-card">
-    <a href="/assets/Ray-tracer/index.html">
+    <a href="/assets/CPURay-tracer/index.html">
       <img src="/assets/images/RaytracerThumb.png" alt="Raytracer Preview">
       <h3>Ray Tracer</h3>
     </a>
