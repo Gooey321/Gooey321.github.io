@@ -1,7 +1,18 @@
-// Get functions from other scripts
 import { trace, BVHNode, Vector } from "./function.js";
 
 document.body.style.backgroundColor = "#000";
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunctiopn(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 // Get the canvas and context
 const canvas = document.querySelector("#canvas");
@@ -13,8 +24,42 @@ const height = 250;
 const focalLength = 100;
 
 // Rendering parameters
-const maxSamples = 500;
-const samplesPerFrame = 2;
+let maxSamples = 500;
+let samplesPerFrame = 2;
+
+function setupQualityControls() {
+  const maxSamplesSlider = document.getElementById("maxSamples");
+  const samplesPerFrameSlider = document.getElementById("samplesPerFrame");
+  const applyButton = document.getElementById("applyQuality");
+
+  // Update display values
+  maxSamplesSlider.addEventListener("input", (e) => {
+    document.getElementById("maxSamplesValue").textContent = e.target.value;
+  });
+
+  samplesPerFrameSlider.addEventListener("input", (e) => {
+    document.getElementById("samplesPerFrameValue").textContent =
+      e.target.value;
+  });
+
+  // Handle apply button click
+  applyButton.addEventListener("click", () => {
+    maxSamples = parseInt(maxSamplesSlider.value);
+    samplesPerFrame = parseInt(samplesPerFrameSlider.value);
+
+    // Reset and restart render
+    currentSamples = 0;
+    for (let i = 0; i < accumulatedBuffer.length; i++) {
+      accumulatedBuffer[i] = 0;
+      pixelBuffer[i] = 0;
+    }
+    startRender();
+
+    logToConsole(
+      `Quality updated: ${maxSamples} samples, ${samplesPerFrame} per frame`
+    );
+  });
+}
 
 let lastFrameTime = performance.now();
 let fps = 0;
@@ -28,7 +73,7 @@ function calculateFps() {
   return fps.toFixed(1);
 }
 
-// Create FPS Display (existing code)
+// Create FPS Display
 const fpsDisplay = document.createElement("div");
 fpsDisplay.id = "fpsDisplay"; // Set ID for styling
 fpsDisplay.style.position = "absolute";
@@ -43,65 +88,6 @@ document.querySelector("#content").appendChild(fpsDisplay); // Append to content
 
 // Select the console div
 const consoleDiv = document.querySelector("#console");
-
-const lightXSlider = document.getElementById("lightX");
-const lightYSlider = document.getElementById("lightY");
-const lightZSlider = document.getElementById("lightZ");
-
-// Function to update light source position
-function updateLightPosition() {
-  const light = objects.find(
-    (obj) => obj.shape === "sphere" && obj.emission.x > 0
-  );
-  if (light) {
-    light.position.x = parseFloat(lightXSlider.value);
-    light.position.y = parseFloat(lightYSlider.value);
-    light.position.z = parseFloat(lightZSlider.value);
-
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
-
-    // Reset rendering state
-    currentSamples = 0;
-
-    // Reset buffers
-    for (let i = 0; i < accumulatedBuffer.length; i++) {
-      accumulatedBuffer[i] = 0;
-      pixelBuffer[i] = 0;
-    }
-
-    // Rebuild BVH
-    bvh = new BVHNode(objects);
-
-    // Start fresh render
-    startRender();
-  }
-}
-
-function updateSliderValue(slider, valueSpan) {
-  document.getElementById(valueSpan).textContent = slider.value;
-}
-
-// Add event listeners
-lightXSlider.addEventListener("input", () => {
-  updateSliderValue(lightXSlider, "lightXValue");
-  updateLightPosition();
-});
-
-lightYSlider.addEventListener("input", () => {
-  updateSliderValue(lightYSlider, "lightYValue");
-  updateLightPosition();
-});
-
-lightZSlider.addEventListener("input", () => {
-  updateSliderValue(lightZSlider, "lightZValue");
-  updateLightPosition();
-});
-
-// Initialize slider values to match initial light position
-lightXSlider.value = "0";
-lightYSlider.value = "-40";
-lightZSlider.value = "40";
 
 const MAX_CONSOLE_MESSAGES = 15;
 let consoleMessages = [];
@@ -194,9 +180,18 @@ const objects = [
   },
 ];
 
-const bvh = new BVHNode(objects);
+function hexToRGB(hex) {
+  const r = parseInt(hex.substr(1, 2), 16) / 255;
+  const g = parseInt(hex.substr(3, 2), 16) / 255;
+  const b = parseInt(hex.substr(5, 2), 16) / 255;
+  return new Vector(r, g, b);
+}
+
+// Function to build the BVH
+let bvh = new BVHNode(objects);
 
 function bilateralFilter(buffer, width, height, spatialSigma, rangeSigma) {
+  // Existing bilateralFilter implementation...
   const result = new Float32Array(buffer.length);
   const radius = Math.ceil(spatialSigma * 3);
 
@@ -427,7 +422,229 @@ function startRender() {
   renderProgressive();
 }
 
-// Start rendering after the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", () => {
+// Function to populate the sphere selection dropdown
+function populateSphereSelection() {
+  const selectedSphereSelect = document.getElementById("selectedSphere");
+
+  // Clear existing options
+  selectedSphereSelect.innerHTML = "";
+
+  objects.forEach((sphere, index) => {
+    const option = document.createElement("option");
+    option.value = index; // Use index as value
+
+    if (sphere.emission.x > 0) {
+      option.textContent = `Light (Sphere ${index})`;
+    } else {
+      option.textContent = `Sphere ${index}`;
+    }
+
+    selectedSphereSelect.appendChild(option);
+  });
+}
+
+// Function to handle sphere selection change
+function onSphereSelected() {
+  const selectedSphereSelect = document.getElementById("selectedSphere");
+  const selectedIndex = parseInt(selectedSphereSelect.value, 10);
+
+  if (isNaN(selectedIndex)) {
+    document.getElementById("position-controls").style.display = "none";
+    return;
+  }
+
+  const selectedSphere = objects[selectedIndex];
+  if (selectedSphere) {
+    // Show position controls
+    document.getElementById("position-controls").style.display = "block";
+
+    // Update sliders with current position
+    document.getElementById("movePosX").value = selectedSphere.position.x;
+    document.getElementById("movePosY").value = selectedSphere.position.y;
+    document.getElementById("movePosZ").value = selectedSphere.position.z;
+
+    // Update slider value displays
+    document.getElementById("movePosXValue").textContent =
+      selectedSphere.position.x;
+    document.getElementById("movePosYValue").textContent =
+      selectedSphere.position.y;
+    document.getElementById("movePosZValue").textContent =
+      selectedSphere.position.z;
+  }
+}
+
+const debouncedUpdatePosition = debounce((index) => {
+  updateSelectedSpherePosition(index);
+}, 100); // 100ms delay
+
+// Function to handle position slider changes
+function onPositionChange(e) {
+  const selectedSphereSelect = document.getElementById("selectedSphere");
+  const selectedIndex = parseInt(selectedSphereSelect.value, 10);
+
+  if (isNaN(selectedIndex)) return;
+
+  const selectedSphere = objects[selectedIndex];
+
+  const axis = e.target.id;
+  const value = parseFloat(e.target.value);
+
+  if (axis === "movePosX") {
+    selectedSphere.position.x = value;
+    document.getElementById("movePosXValue").textContent = value;
+  } else if (axis === "movePosY") {
+    selectedSphere.position.y = value;
+    document.getElementById("movePosYValue").textContent = value;
+  } else if (axis === "movePosZ") {
+    selectedSphere.position.z = value;
+    document.getElementById("movePosZValue").textContent = value;
+  }
+
+  // Use the debounced update instead of immediate update
+  debouncedUpdatePosition(selectedIndex);
+}
+
+function updateSelectedSpherePosition(index) {
+  // Clear canvas
+  ctx.clearRect(0, 0, width, height);
+
+  // Reset rendering state
+  currentSamples = 0;
+
+  // Reset buffers
+  for (let i = 0; i < accumulatedBuffer.length; i++) {
+    accumulatedBuffer[i] = 0;
+    pixelBuffer[i] = 0;
+  }
+
+  // Rebuild BVH
+  bvh = new BVHNode(objects);
+
+  // Start fresh render
   startRender();
+}
+
+function deleteSelectedSphere() {
+  const selectedShpereSelect = document.getElementById("selectedSphere");
+  const selectedIndex = parseInt(selectedShpereSelect.value, 10);
+
+  if (isNaN(selectedIndex || selectedIndex <= 1)) return;
+
+  objects.splice(selectedIndex, 1);
+
+  bvh = new BVHNode(objects);
+
+  populateSphereSelection();
+  document.getElementById("position-controls").style.display = "none";
+
+  // Reset and restart render
+  currentSamples = 0;
+  for (let i = 0; i < accumulatedBuffer.length; i++) {
+    accumulatedBuffer[i] = 0;
+    pixelBuffer[i] = 0;
+  }
+  startRender();
+
+  logToConsole(`Deleted sphere ${selectedIndex}`);
+}
+
+// Attach event listeners and initialize sphere selection on DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+  populateSphereSelection();
+  setupQualityControls();
+
+  const selectedSphereSelect = document.getElementById("selectedSphere");
+  selectedSphereSelect.addEventListener("change", onSphereSelected);
+
+  // Add event listeners for position sliders
+  document
+    .getElementById("movePosX")
+    .addEventListener("input", onPositionChange);
+  document
+    .getElementById("movePosY")
+    .addEventListener("input", onPositionChange);
+  document
+    .getElementById("movePosZ")
+    .addEventListener("input", onPositionChange);
+
+  // Hide position controls initially
+  document.getElementById("position-controls").style.display = "none";
+
+  document.getElementById("toggleSphereForm").addEventListener("click", (e) => {
+    const button = e.target;
+    const container = document.getElementById("sphereFormContainer");
+    const isExpanded = container.classList.contains("expanded");
+
+    if (isExpanded) {
+      container.classList.remove("expanded");
+      button.textContent = "▶ Add New Sphere";
+    } else {
+      container.classList.add("expanded");
+      button.textContent = "▼ Add New Sphere";
+    }
+  });
+
+  document
+    .getElementById("deleteSphere")
+    .addEventListener("click", deleteSelectedSphere);
+
+  function updateDeleteButtonState() {
+    const deleteButton = document.getElementById("deleteSphere");
+    deleteButton.disabled = objects.length <= 1;
+  }
+
+  const oldPopulateSphereSelection = populateSphereSelection;
+  populateSphereSelection = function () {
+    oldPopulateSphereSelection();
+    updateDeleteButtonState();
+  };
+
+  // Start initial render
+  startRender();
+});
+
+// Handle adding new spheres
+document.getElementById("sphere-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const posX = parseFloat(document.getElementById("addPosX").value);
+  const posY = parseFloat(document.getElementById("addPosY").value);
+  const posZ = parseFloat(document.getElementById("addPosZ").value);
+  const radius = parseFloat(document.getElementById("radius").value);
+  const color = hexToRGB(document.getElementById("color").value);
+  const roughness = parseFloat(document.getElementById("roughness").value);
+  const emission = parseFloat(document.getElementById("emission").value);
+
+  const newSphere = {
+    shape: "sphere",
+    position: new Vector(posX, posY, posZ),
+    radius: radius,
+    emission: new Vector(emission, emission, emission),
+    reflectivity: color,
+    roughness: roughness,
+  };
+
+  objects.push(newSphere);
+  bvh = new BVHNode(objects);
+
+  // Reset and start new render
+  currentSamples = 0;
+  for (let i = 0; i < accumulatedBuffer.length; i++) {
+    accumulatedBuffer[i] = 0;
+    pixelBuffer[i] = 0;
+  }
+  startRender();
+
+  logToConsole(
+    `Added sphere at (${posX}, ${posY}, ${posZ}) with radius ${radius}`
+  );
+
+  // Repopulate sphere selection dropdown
+  populateSphereSelection();
+
+  // Select the newly added sphere
+  const selectedSphereSelect = document.getElementById("selectedSphere");
+  const newIndex = objects.length - 1;
+  selectedSphereSelect.value = newIndex;
+  onSphereSelected();
 });

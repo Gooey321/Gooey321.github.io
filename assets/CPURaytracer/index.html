@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CPU Ray Tracer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <h2>Raytracer</h2>
+      <div id="content">
+        <canvas id="canvas" width="250" height="250"></canvas>
+        <div id="console"></div>
+        <div id="fpsDisplay"></div>
+      </div>
+      <div id="controls">
+        <!-- Sphere Selection Dropdown -->
+        <h3>Move Sphere</h3>
+        <div class="form-group">
+          <label for="selectedSphere">Select Sphere:</label>
+          <select id="selectedSphere">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+          <button id="deleteSphere" class="delete-button">Delete Sphere</button>
+        </div>
+
+        <!-- Position Sliders for Moving Spheres -->
+        <div id="position-controls" style="display: none">
+          <div class="form-group">
+            <label for="movePosX">Position X:</label>
+            <input
+              type="range"
+              id="movePosX"
+              min="-100"
+              max="100"
+              value="0"
+              step="1"
+            />
+            <span id="movePosXValue">0</span>
+          </div>
+          <div class="form-group">
+            <label for="movePosY">Position Y:</label>
+            <input
+              type="range"
+              id="movePosY"
+              min="-100"
+              max="100"
+              value="0"
+              step="1"
+            />
+            <span id="movePosYValue">0</span>
+          </div>
+          <div class="form-group">
+            <label for="movePosZ">Position Z:</label>
+            <input
+              type="range"
+              id="movePosZ"
+              min="-100"
+              max="100"
+              value="0"
+              step="1"
+            />
+            <span id="movePosZValue">0</span>
+          </div>
+        </div>
+
+        <h3>Quality Controls</h3>
+        <div id="quality-controls">
+          <div class="form-group">
+            <label for="maxSamples">Max Samples:</label>
+            <input
+              type="range"
+              id="maxSamples"
+              min="100"
+              max="2000"
+              value="500"
+              step="100"
+            />
+            <span id="maxSamplesValue">500</span>
+          </div>
+          <div class="form-group">
+            <label for="samplesPerFrame">Samples Per Frame:</label>
+            <input
+              type="range"
+              id="samplesPerFrame"
+              min="1"
+              max="10"
+              value="2"
+              step="1"
+            />
+            <span id="samplesPerFrameValue">2</span>
+          </div>
+          <button id="applyQuality">Apply Changes</button>
+        </div>
+
+        <!-- Add New Sphere Form -->
+        <div>
+          <button id="toggleSphereForm" class="toggle-button">
+            ▶ Add New Sphere
+          </button>
+          <div id="sphereFormContainer">
+            <form id="sphere-form">
+              <div class="form-group">
+                <label>Position:</label>
+                <input
+                  type="number"
+                  id="addPosX"
+                  placeholder="X"
+                  value="0"
+                  step="1"
+                />
+                <input
+                  type="number"
+                  id="addPosY"
+                  placeholder="Y"
+                  value="0"
+                  step="1"
+                />
+                <input
+                  type="number"
+                  id="addPosZ"
+                  placeholder="Z"
+                  value="20"
+                  step="1"
+                />
+              </div>
+              <div class="form-group">
+                <label>Radius:</label>
+                <input
+                  type="number"
+                  id="radius"
+                  value="3"
+                  min="1"
+                  max="20"
+                  step="0.5"
+                />
+              </div>
+              <div class="form-group">
+                <label>Color:</label>
+                <input type="color" id="color" value="#ffffff" />
+              </div>
+              <div class="form-group">
+                <label>Roughness:</label>
+                <input
+                  type="range"
+                  id="roughness"
+                  min="0"
+                  max="10"
+                  value="3"
+                  step="0.1"
+                />
+                <span id="roughnessValue">3</span>
+              </div>
+              <div class="form-group">
+                <label>Emission:</label>
+                <input
+                  type="number"
+                  id="emission"
+                  value="0"
+                  min="0"
+                  max="20"
+                  step="0.5"
+                />
+              </div>
+              <button type="submit">Add Sphere</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="cpuRender.js"></script>
+  </body>
+</html>
